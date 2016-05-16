@@ -1,0 +1,125 @@
+\documentclass{llncs}
+
+\usepackage{enumitem}
+\usepackage[spanish]{babel}
+\usepackage[latin1]{inputenc}
+
+\title{Propuesta de tesina para la obtención del grado Licenciado en Ciencias de la Computación}
+
+\author{}%{Lucio Nardelli \and Hernán Ponce de León}
+\institute{}
+
+\begin{document}
+
+\maketitle
+
+\hspace{-6mm} {\bf Postulante:} Santiago González
+
+\hspace{-6mm} {\bf Director:} Hernán Ponce de León
+
+\section{Situación del postulante}
+
+Actualmente adeudo la tesina para alcanzar el título de la Licenciatura en Ciencias de la Computación. Me encuentro trabajando ocho horas por día, pudiendo dedicar entre 3 y 4 horas del mismo a la realización de la tesina.
+
+\section{Título}
+
+Mejora en el descubrimiento de procesos mediante el uso de concurrencia e información negativa.
+
+\section{Motivación}
+
+El descubrimiento de procesos consiste en un conjunto de técnicas que permiten generar un modelo formal de los servicios o 
+procesos de un negocio partiendo de un conjunto de trazas llamado \textit{log}. Esta formalización 
+permite una mejor comprensión del sistema subyacente, así como la utilización de diferentes técnicas de 
+Process Mining con el objetivo de mejorar el sistema~\cite{0027363} .
+La tarea de descubrir un proceso es una tarea difícil ya que se espera que el modelo generado sea bueno en cuatro cualidades:
+\begin{itemize}
+    \item {\bf replay fitness:} habilidad del modelo de reproducir las trazas del \textit{log}. 
+  \item {\bf precisión:} cercanía del comportamiento del modelo con respecto a las trazas.
+  \item {\bf generalización:} capacidad del modelo de representar trazas del sistema que no han sido observadas aún en el log.
+  \item {\bf simplicidad:} inexistencia de un modelo más simple para representar el comportamiento observado.
+\end{itemize}
+Existen varios modelos para visualizar los modelos obtenidos; en el ámbito científico las redes de Petri son uno de
+los modelos más utilizados, sin embargo la industria aún no ha llegado a adoptar dicho formalismo. Una posible razón para esto es que la mayoría de los algoritmos infieren la información de concurrencia de una manera que no es clara para el usuario. 
+Recientemente se ha propuesto una técnica de descubrimiento que toma dicha información como entrada de la misma~\cite{ATVA15}.
+Dicha técnica construye un modelo en forma de árbol que permite reproducir cada traza del \textit{log}, pero no permite representar ningún 
+otro comportamiento. Esto lo hace muy preciso, pero muy poco general. Un segundo paso permite mejorar la generalidad mezclando o foldeando 
+el árbol en un grafo con ciclos, perdiendo precisión en el proceso. Diferentes técnicas de foldeo han sido propuestas dependiendo 
+de ciertas propiedades que el modelo final debe cumplir, tales como la capacidad de reproducir cada traza original del \textit{log} o la preservación de concurrencia entre los eventos del \textit{log}.
+
+\section{Estado del arte}
+
+La técnica de descubrimiento presentada en~\cite{ATVA15} toma como entrada el \textit{log} del sistema y una relación de concurrencia y transforma cada secuencia (traza) en un orden parcial. 
+De manera de representar dicha información de forma compacta, el segundo paso del algoritmo consiste en mezclar las partes 
+comunes de los distintos órdenes parciales, generando un árbol donde cada rama representa un orden parcial; 
+dicho árbol es representado usando una estructura de eventos~\cite{NielsenPW81}. 
+Las estructuras de eventos son isomorfas a las redes de ocurrencias (una subclase de redes de Petri con 
+una estructura acíclica). Sin embargo, por cada estructura de eventos existen infinitas redes de ocurrencias 
+isomorfas a ella.~\cite{ATVA15} obtiene una de ellas y luego convierte la red acíclica en una con 
+ciclos mediante un paso de foldeo. Las diferentes maneras de foldear la red son codificas utilizando 
+Satisfabilidad Modulo Teorías (SMT)~\cite{NieuwenhuisO06}. El problema de esta codificación es que en 
+muchos ejemplos la codificación resulta muy restrictiva y el grafo no puede ser foldeado.
+
+\section{Objetivos específicos}
+
+\begin{itemize}
+ \item Dado que existen infinitas maneras de transformar una estructura de eventos en una red de 
+     ocurrencias, estudiaremos cómo dicho paso afecta a la satisfabilidad o no de la fórmula SMT.
+ \item La mayoría de las nociones de simplicidad para procesos dependen de la cantidad de elementos en el grafo,
+     por lo tanto es importante intentar foldear lo más posible el mismo. 
+     La codificación actual toma como entrada el número de elementos del grafo final. Esto hace que diferentes parámetros deban ser
+     pasados manualmente hasta generar una fórmula satisfasible que genere una red simple. 
+     Proponemos codificar este problema como un problema de optimización~\cite{NieuwenhuisO06} para encontrar una 
+     red simple de manera completamente automática.
+ \item Si bien desde un punto de vista teórico~\cite{ATVA15} propone diferentes codificaciones para foldear las redes, 
+     desde un punto de vista técnico varias simplificaciones han sido hechas para facilitar la implementación. 
+     En este trabajo proponemos eliminar dichas restricciones e implementar dicho paso de la manera más general posible.
+ \item Modificar la implementación actual siguiendo los objetivos descriptos arriba.
+     Validar y comparar los resultados utilizando diferentes benchmarks y algoritmos de la literatura.
+\end{itemize}
+
+\section{Metodología y plan de trabajo}
+
+El siguiente plan de trabajo se realizará durante aproximadamente 7 meses, con una dedicación media de trabajo, bajo la supervisión de Hernán Ponce de León.
+
+\bigskip \noindent
+\textbf{Estudio del estado del arte}
+  \begin{description}[style=multiline,leftmargin=2.5cm,font=\normalfont]
+    \item[\textit{Objetivos}]
+       Ampliar y profundizar los conocimientos sobre las diferentes técnicas de descubrimiento de procesos, en particular la utilizada en ~\cite{ATVA15}. Generar una sólida base de conocimientos para el desarrollo general de la tesina.
+    \item[\textit{Dedicación}]
+       Un mes y medio
+  \end{description}
+
+\bigskip \noindent
+\textbf{Análisis y desarrollo teórico}
+  \begin{description}[style=multiline,leftmargin=2.5cm,font=\normalfont]
+    \item[\textit{Objetivos}]
+       Proponer y refinar soluciones en forma teórica a los distintos objetivos especificos propuestos. Definir reglas formales que faciliten 
+       una futura implementación.
+    \item[\textit{Dedicación}]
+       Dos meses y medio
+  \end{description}
+
+\bigskip \noindent
+\textbf{Implementación de los resultados obtenidos}
+  \begin{description}[style=multiline,leftmargin=2.5cm,font=\normalfont]
+    \item[\textit{Objetivos}]
+       Modificar la implementación actual para contemplar los distintos resultados que se obtienen en la etapa anterior.
+    \item[\textit{Dedicación}]
+       Dos meses
+  \end{description}
+
+\bigskip \noindent
+\textbf{Validación y comparación}
+  \begin{description}[style=multiline,leftmargin=2.5cm,font=\normalfont]
+    \item[\textit{Objetivos}]
+       Validar y comparar los resultados obtenidos con los cambios realizados contra la manera utilizada previo a la existencia de las mismas.
+    \item[\textit{Dedicación}]
+       Tres semanas
+  \end{description}
+
+
+\bibliographystyle{splncs}
+\bibliography{bib}
+
+\end{document}

@@ -1,0 +1,160 @@
+\documentclass{llncs}
+
+\usepackage[utf8]{inputenc} 
+%\usepackage{graphicx}
+%\usepackage{verbatim}
+%\usepackage{amsfonts}
+%\usepackage{theorem}
+%\usepackage{mathrsfs}
+%\usepackage{enumerate}
+%\usepackage{amssymb}
+%\usepackage{amsmath}
+%\usepackage{subfigure}
+%\usepackage{color}
+%\usepackage{tikz}
+%\usepackage{amsfonts, pifont}
+%\usepackage{cancel}
+%\usepackage[draft]{fixme}
+%\usepackage{mathpartir}
+%\usepackage{algorithm}
+%\usetikzlibrary{automata,petri,positioning}
+\usepackage[spanish]{babel} 
+\usepackage{enumitem}
+
+\title{Propuesta de tesina para la obtención del grado Licenciado en Ciencias de la Computación}
+
+\author{}%{Lucio Nardelli \and Hernán Ponce de León}
+\institute{}
+
+\begin{document}
+
+\maketitle
+
+\hspace{-6mm} {\bf Postulante:} Santiago González
+
+\hspace{-6mm} {\bf Director:} Hernán Ponce de León
+
+\section{Situación del Postulante}
+
+Actualmente adeudo la tesina para alcanzar el título de la licenciatura en ciencias de la computación.
+Me encuentro trabajando ocho horas por día, pudiendo dedicar entre 3 y 4 horas del mismo a la realización de la tesina.
+
+\section{Título}
+
+Mejora en el descubrimiento de procesos mediante el agregado de transiciones invisibles.
+
+\section{Motivación}
+El descubrimiento de procesos consiste en un conjunto de técnicas que permiten generar un modelo
+formal de los servicios o procesos de un negocio partiendo de un conjunto 
+de trazas llamado \textit{log}. Esta formalización permite una mejor comprensión del sistema subyacente, así 
+como utilizar luego diferentes técnicas de Process Mining con el objetivo de mejorar el sistema.
+
+
+La tarea de descubrir un proceso es una tarea difícil ya que se espera que el modelo generado sea bueno en cuatro cualidades:
+\begin{itemize}
+\item \textbf{replay fitness}: habilidad del modelo de reproducir las trazas del log.
+\item \textbf{precisión}: cercanía del comportamiento del modelo con respecto a las trazas.
+\item \textbf{generalización}: capacidad del modelo de representar trazas del sistema que no han sido observadas aun en el log.
+\item \textbf{simplicidad}: inexistencia de un modelo mas simple para representar el comportamiento observado.
+\end{itemize}
+
+
+Varios algoritmos generan modelos que utilizan transiciones invisibles para capturar acciones que ocurren en el proceso pero no en las trazas; dichas acciones invisibles pueden ser utilizadas para 
+modelar, por ejemplo, decisiones de ruteo del proceso. El uso de transiciones invisibles permite descubrir modelos más simples y fáciles de comprender para el usuario.
+
+Recientemente se ha propuesto una técnica de descubrimiento que construye un modelo en forma de árbol;
+%referencia paper Zeta
+dicho modelo permite reproducir cada traza del log, pero no permite representar ningún otro comportamiento (es muy preciso, pero muy poco general). Un segundo paso permite mejorar la generalidad mezclando o foldeando el árbol en un grafo con ciclos, perdiendo precisión en el proceso. Diferentes técnicas de foldeo han sido propuestas 
+dependiendo de ciertas propiedades que el modelo final debe cumplir capacidad de reproducir cada traza, como por ejemplo la preservación de concurrencia.
+
+Las diferentes maneras de foldear el grafo son codificas como un conjunto de restricciones sobre variables enteras y utilizando Satisfabilidad Modulo Teorías (SMT).
+En muchos ejemplos, la codificación en SMT resulta muy restrictiva y el grafo no puede ser foldeado. En este trabajo proponemos agregar transiciones invisibles al grafo para no solo generar un árbol más simple sino también para permitir foldear en casos donde no es posible utilizando solo transiciones visibles.
+
+
+\section{Estado del Arte}
+
+Completar
+
+\iffalse
+\subsection{Satisfacibilidad módulo teorías}
+
+El problema de satisfacibilidad de restricciones , es decir, determinar si una cierta fórmula posee (o no) una solución, es un porblema recurrente en la teoría de las ciencias de la computación. Aparece en diversas áreas como ser verificación de hardware, \textit{scheduling}, \textit{model checking} y optimización, entre otras \cite{BjornerDeMoura2009}\cite{NieuwenhuisO06}.%; en este trabajo los utilizaremos para descubrir modelos óptimos o simplificar modelos descubiertos con otros algoritmos.
+
+En particular el problema de sastisfacibilidad modulo teorías (SMT por sus siglas en inglés -\textit{Satisfiability Modulo Theories}-) es un problema de decisión para fórmulas lógicas respecto a teorías subyacentes como la teoría de números reales, la teoría de los enteros o las teorías sobre diversas estructuras de datos como listas o arrays. Estas teorías son expresadas mediante lógica de primer orden con igualdad.
+
+Los problemas de decisión de este estilo son muy importantes hoy en día en diferentes áreas y por lo tanto existen programas que se dedican eficientemente a su resolución, los llamados SMT-\textit{solvers}\cite{BjornerDeMoura2009}. 
+
+Algunos ejemplos de solvers son el implementado por Microsoft Research, Z3 \cite{MouraB08}, el creado por Biere et. al. para trabajar con arrays y vectores de bits, Boolector \cite{Brummayer09} o el creado en el SRI Internacional, YITES \cite{dutertre2006yices} entre muchos otros.
+
+\subsection{Algoritmos de descubirmiento de procesos}
+
+Los algoritmos de descubrimiento de procesos tienen como objetivo tomar datos de diferentes trazas de un sistema y armar con ellos un modelo representativo del comportamiento observado. Existen varios algoritmos para descubrir procesos en la literatura; en este trabajo sólo nos centraremos en aquellos que generan redes de Petri. Esta decisión se toma ya que las mismas poseen diferentes ventajas comparativas, principalmente, para sistemas distribuidos, donde generan un representación más compacta que otros modelos, por ejemplo, las represetaciones mediante máquinas de estado finito.
+
+Cada uno de de los algoritmos para generar redes de Petri investigados tiene sus limitaciones: el $\alpha$-algoritmo~\cite{AalstWM04} sólo permite descubrir redes de Petri bien estructuradas sin ciclos de tama\~no uno o dos además, no permite dependencias no locales ni garantiza fitness. El \textit{ILP-miner}~\cite{derWerfDHS09} sólo tiene en cuenta que el modelo encontrado sea adecuado y que sea independiente del tama\~no del log, no ocupándose de la simplicidad ni el tama\~no del modelo obtenido; el \textit{inductive miner}\cite{LeemansFV14} genera redes estructuradas en bloques (una representación visual muy simple), pero agrega transiciones invisibles; los miners basados en algoritmos genéticos~\cite{MedeirosWA07} tienen un costo computacional muy alto; el algoritmo basado en teoría de poliedros~\cite{CarmonaC14} produce la clase más general de redes de Petri y asegura fitness, sin embargo los modelos minados suelen no ser simples.
+
+\subsection{Simplificación de modelos}
+ 
+Sorpresivamente, existen pocos algoritmos para simplificar redes de Petri obtenidas mediante un algoritmo de descubrimiento de procesos. Murata menciona en un survey sobre redes de Petri~\cite{murata} varias reglas de simplificación que preservan propiedades como alcanzabilidad y liveness, sin embargo dichas reglas no garantizan la preservación del comportamiento de la red; \cite{ColomS89a} presenta condiciones para detectar places que pueden ser eliminados de la red (i.e. aquellos que no restringen la manera en la cual las transiciones puede disparar y por lo tanto no aportan al comportamiento del sistema). El problema es que estas condiciones son demasiado restrictivas ya que se centran en preservar el comportamiento mientras que, en nuestro caso, nos interesa obtener un modelo más general.
+
+Dentro del dominio de Process Mining existen trabajos recientes que intentan simplificar un modelo, pero estas simplificaciones dependen también del log del sistema. \cite{FahlandA11} utiliza el \textit{unfolding} de una red de Petri (descubierta previamente por cualquier otro método) restringido a los comportamientos del log que luego es nuevamente \textit{foldeado} para incrementar la generalización del modelo; este algoritmo preserva fitness siempre y cuando la red original también la preserve. \cite{BPM152} explica como eliminar arcos de la red sin deteriorar demasiado sus cualidades, el problema es modelado como un problema de optimización y resulto con métodos de programación entera lineal. \cite{BPM15} utiliza la dualidad de~\cite{CarmonaC14} entre la ecuación de marcado de la red y la teoría de poliedros y utiliza un SMT solver para simplificar los poliedros, este método es uno de los pocos en utilizar información negativa (i.e. trazas que no deben pertenecer al sistema) para controlar el paso de generalización.
+
+\fi
+
+\section{Objetivos específicos}
+
+\begin{itemize}
+\item Desarrollo teorico del uso de transiciones invisibles (chamuyando más)
+\item Implementación de los mismos en herramienta ya utilizada para modelizacion (chamuyando más)
+\item algo más?
+\end{itemize}
+
+\section{Metodología y Plan de Trabajo}
+
+El siguiente plan de trabajo se realizará durante aproximadamente 7 meses, con una dedicación media de trabajo, bajo la supervisión de Hernán Ponce de León.
+
+\bigskip \noindent
+\textbf{Estudio del estado del arte}
+  \begin{description}[style=multiline,leftmargin=2.5cm,font=\normalfont]
+    \item[\textit{Objetivos}]
+       Ampliar y profundizar los conocimientos sobre las diferentes técnicas de descubrimiento de procesos, en particular la utilizada en [ref zeta]
+       %referencia zeta
+       Generar una sólida base de conocimientos para el desarrollo general de la tesina.
+    \item[\textit{Dedicación}]
+       Un mes y medio
+  \end{description}
+
+\bigskip \noindent
+\textbf{Análisis y desarrollo teórico}
+  \begin{description}[style=multiline,leftmargin=2.5cm,font=\normalfont]
+    \item[\textit{Objetivos}]
+       Estudiar la forma de introducir las transiciones invisibles a los métodos de modelado actuales. Definir reglas formales respecto de las transiciones para poder utilizarlas
+       en una futura implementación.
+    \item[\textit{Dedicación}]
+       Dos meses y medio
+  \end{description}
+
+\bigskip \noindent
+\textbf{Implementación de las transiciones invisibles}
+  \begin{description}[style=multiline,leftmargin=2.5cm,font=\normalfont]
+    \item[\textit{Objetivos}]
+       Modificar el sistema actual para contemplar el uso de transiciones invisibles. Al mismo
+       tiempo, implementar el algoritmo de inserción de las transiciones en cuestión.
+    \item[\textit{Dedicación}]
+       Dos meses
+  \end{description}
+
+\bigskip \noindent
+\textbf{Validación y comparación}
+  \begin{description}[style=multiline,leftmargin=2.5cm,font=\normalfont]
+    \item[\textit{Objetivos}]
+       Validar y comparar los resultados obtenidos al utilizar transiciones invisibles contra la manera utilizada previo a la existencia de las mismas.
+    \item[\textit{Dedicación}]
+       Dos semanas
+  \end{description}
+
+
+\bibliographystyle{splncs}
+\bibliography{bib}
+
+\end{document}
+
